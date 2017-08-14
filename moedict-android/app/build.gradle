@@ -46,6 +46,9 @@ dependencies {
     // For Debug
     implementation "com.jakewharton.timber:timber:${libs.timber}"
 
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:${libs.leakcanary}"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${libs.leakcanary}"
+
     // For Testing
     testImplementation "junit:junit:${libs.junit}"
 
