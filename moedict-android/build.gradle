@@ -28,6 +28,7 @@ ext {
     libs = [
             supportVersion   : "26.0.1",
             butterknife      : "8.8.1",
+            dagger           : "2.11",
 
             // for debug
             timber           : "4.5.1",

@@ -43,6 +43,13 @@ dependencies {
     implementation "com.jakewharton:butterknife:${libs.butterknife}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${libs.butterknife}"
 
+    // Dagger DI
+    implementation "com.google.dagger:dagger:${libs.dagger}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${libs.dagger}"
+
+    implementation "com.google.dagger:dagger-android-support:${libs.dagger}"
+    annotationProcessor "com.google.dagger:dagger-android-processor:${libs.dagger}"
+
     // For Debug
     implementation "com.jakewharton.timber:timber:${libs.timber}"
 

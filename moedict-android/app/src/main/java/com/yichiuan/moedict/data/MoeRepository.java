@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Formatter;
-import java.util.Timer;
 
 import moe.Dictionary;
 import moe.Word;
@@ -25,21 +24,7 @@ public class MoeRepository {
     private byte[] buffer;
 
     // Private constructor prevents instantiation from other classes
-    private MoeRepository() {
-    }
-
-    // SingletonHolder is loaded on the first execution of MoeRepository.getInstance()
-    // or the first access to SingletonHolder.INSTANCE, not before.
-    private static class SingletonHolder {
-        private static final MoeRepository INSTANCE = new MoeRepository();
-    }
-
-    public static MoeRepository getInstance(Context context) {
-        SingletonHolder.INSTANCE.setContext(context);
-        return SingletonHolder.INSTANCE;
-    }
-
-    private void setContext(Context context) {
+    MoeRepository(Context context) {
         this.context = context;
     }
 

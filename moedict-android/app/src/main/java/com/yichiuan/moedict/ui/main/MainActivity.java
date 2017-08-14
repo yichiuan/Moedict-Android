@@ -18,17 +18,25 @@ import android.view.View;
 import com.yichiuan.moedict.R;
 import com.yichiuan.moedict.data.MoeRepository;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 import moe.Word;
 
 public class MainActivity extends AppCompatActivity {
+
+    @Inject
+    MoeRepository moeRepository;
 
     @BindView(R.id.recyclerview_heteronym)
     RecyclerView heteronymRecyclerview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -67,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-
-            MoeRepository moeRepository = MoeRepository.getInstance(this);
 
             Word word = moeRepository.getMoeWord(query);
 

@@ -28,3 +28,6 @@
 -keepclassmembers public class android.support.v7.widget.SearchView {
     public <init>(...);
 }
+
+# dagger
+-dontwarn dagger.android.**
