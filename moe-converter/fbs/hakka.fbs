@@ -1,0 +1,29 @@
+include "u16string.fbs";
+
+namespace moe.hakka;
+
+table Dictionary {
+  words:[Word];
+}
+
+table Word {
+  index:string(required, key);
+  title:[ushort](required);
+  heteronyms:[Heteronym];
+}
+
+table Heteronym {
+  audio_id:string;
+  pinyin:string;
+  definitions:[Definition];
+  synonyms:[ushort];
+  antonyms:[ushort];
+}
+
+table Definition {
+  def:[ushort](required);
+  type:string;
+  examples:[UTF16String];
+}
+
+root_type Dictionary;

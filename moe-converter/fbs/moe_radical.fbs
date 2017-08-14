@@ -1,0 +1,16 @@
+namespace moe;
+
+table RadicalTable {
+  radicals:[Radical];
+}
+
+table Radical {
+  index:string(required, key);
+  stroke:[Words];
+}
+
+table Words {
+  word:[ushort];
+}
+
+root_type RadicalTable;

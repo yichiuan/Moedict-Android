@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="StaticTextView">
+        <attr name="text_size" format="dimension"/>
+        <attr name="line_spacing_multiplier" format="float"/>
+    </declare-styleable>
+</resources>

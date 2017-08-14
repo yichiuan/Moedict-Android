@@ -1,0 +1,14 @@
+include "u16string.fbs";
+
+namespace moe;
+
+table Categories {
+  categories:[Category];
+}
+
+table Category {
+  index:string(required, key);
+  terms:[UTF16String];
+}
+
+root_type Categories;

@@ -1,0 +1,46 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0-beta2'
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.7.3'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+ext {
+    minSdkVersion = 16
+    targetSdkVersion = 26
+    compileSdkVersion = 26
+    buildToolsVersion = '26.0.1'
+
+    libs = [
+            supportVersion   : "26.0.1",
+            butterknife      : "8.8.1",
+
+            // for debug
+            timber           : "4.5.1",
+            leakcanary       : "1.5.2",
+
+            // for test
+            junit            : "4.12",
+            testrunner       : "1.0.0",
+            espresso         : "3.0.0",
+            mockito          : "2.8.47",
+    ]
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

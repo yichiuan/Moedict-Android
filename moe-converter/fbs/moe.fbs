@@ -1,0 +1,42 @@
+include "u16string.fbs";
+
+namespace moe;
+
+table Dictionary {
+  words:[Word];
+}
+
+table Word {
+  index:string(required, key);
+  title:[ushort](required);
+  non_radical_stroke_count:ubyte;
+  stroke_count:ubyte;
+  radical:string;
+  heteronyms:[Heteronym];
+  translation:Translation;
+}
+
+table Heteronym {
+  bopomofo:string;
+  pinyin:string;
+  audio_id:string;
+  definitions:[Definition];
+}
+
+table Definition {
+  def:[ushort](required);
+  type:string;
+  quotes:[UTF16String];
+  examples:[UTF16String];
+  links:[UTF16String];
+  synonyms:[ushort];
+  antonyms:[ushort];
+}
+
+table Translation {
+  English:[string];
+  Deutsch:[string];
+  francais:[string];
+}
+
+root_type Dictionary;

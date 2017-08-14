@@ -1,0 +1,5 @@
+namespace moe;
+
+table UTF16String {
+  u16str:[ushort];
+}
