@@ -43,6 +43,9 @@ dependencies {
     implementation "com.jakewharton:butterknife:${libs.butterknife}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${libs.butterknife}"
 
+    // For Debug
+    implementation "com.jakewharton.timber:timber:${libs.timber}"
+
     // For Testing
     testImplementation "junit:junit:${libs.junit}"
 

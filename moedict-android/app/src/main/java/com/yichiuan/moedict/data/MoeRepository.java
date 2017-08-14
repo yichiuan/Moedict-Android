@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Formatter;
+import java.util.Timer;
 
 import moe.Dictionary;
 import moe.Word;
+import timber.log.Timber;
 
 public class MoeRepository {
 
@@ -69,7 +71,7 @@ public class MoeRepository {
             is.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         return ByteBuffer.wrap(buffer, 0, readSize);
