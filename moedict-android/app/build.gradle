@@ -41,6 +41,7 @@ dependencies {
 
     // ButterKnife
     implementation "com.jakewharton:butterknife:${libs.butterknife}"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     annotationProcessor "com.jakewharton:butterknife-compiler:${libs.butterknife}"
 
     // Dagger DI
