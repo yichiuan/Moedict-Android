@@ -7,6 +7,7 @@
 #include "hakka_converter.h"
 #include "moe_radical_converter.h"
 #include "moe_categories_converter.h"
+#include "index_converter.h"
 
 using namespace std;
 using namespace moe;
@@ -39,13 +40,16 @@ int main(int argc, char *argv[])
         } else if (type == "category") {
             CategoryConverter converter;
             converter.convert(input_file, output_path);
+        } else if (type == "index") {
+            IndexConverter converter;
+            converter.convert(input_file, output_path);
         } else {
             cerr << "Error type.";
             return EXIT_FAILURE;
         }
 
     } catch (const exception& e) {
-        cerr << input_file << " : " << e.what();
+        cerr << input_file << " : " << e.what() << endl;
         return EXIT_FAILURE;
     }
 

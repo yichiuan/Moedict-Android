@@ -1,5 +1,5 @@
-#ifndef MOE_CATEGORIES_CONVERTER_H
-#define MOE_CATEGORIES_CONVERTER_H
+#ifndef MOE_INDEX_CONVERTER_H
+#define MOE_INDEX_CONVERTER_H
 
 #include "converter.h"
 
@@ -8,7 +8,7 @@
 
 #include "json/json.hpp"
 #include "flatbuffers/flatbuffers.h"
-#include "moe_categories_generated.h"
+#include "index_generated.h"
 
 namespace moe {
 
@@ -20,17 +20,12 @@ using flatbuffers::FlatBufferBuilder;
 using flatbuffers::Vector;
 using flatbuffers::Offset;
 
-class CategoryConverter : public Converter {
+class IndexConverter : public Converter {
 
 public:
     virtual void convert(const string& input, const string& output) override;
-
-private:
-
-    Offset<Category> produce_category(const json& category, const string& index,
-                                    FlatBufferBuilder& builder);
 };
 
 }
 
-#endif // MOE_CATEGORIES_CONVERTER_H
+#endif // INDEX_CONVERTER_H

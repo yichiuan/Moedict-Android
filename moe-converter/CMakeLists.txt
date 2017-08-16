@@ -53,7 +53,7 @@ include_directories(${INCLUDE_DIRS})
 add_executable(${PROJECT_NAME} ${GENERATED_FILES} ${FBS_FILES}
     src/main.cpp src/converter.cpp src/taiwan_converter.cpp src/moe_converter.cpp
     src/hakka_converter.cpp src/moe_radical_converter.cpp src/moe_categories_converter.cpp
-    src/text_utils.cpp)
+    src/index_converter.cpp src/text_utils.cpp)
 target_link_libraries(${PROJECT_NAME} -static-libgcc -static-libstdc++)
 
 # install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_LIBRARY_ARCHITECTURE})

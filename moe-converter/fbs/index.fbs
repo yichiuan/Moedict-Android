@@ -1,0 +1,7 @@
+namespace moe;
+
+table Index {
+  words:[string];
+}
+
+root_type Index;

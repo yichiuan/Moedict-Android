@@ -8,13 +8,16 @@ import java.nio.ByteBuffer;
 import java.util.Formatter;
 
 import moe.Dictionary;
+import moe.Index;
 import moe.Word;
 import timber.log.Timber;
 
 public class MoeRepository {
 
     private static final int MOD_MASK = 0x3FF; // 0b1111111111
-    private static final int BUFFER_SIZE = (int)(1024 * 1024 * 1.2); // 1.2MB
+    private static final int BUFFER_SIZE = (int)(1024 * 1024 * 3.2); // 3.2MB
+
+    private static final String MOE_INDEX_DATAPATH = "moe/index.bin";
 
     private Context context;
 
@@ -38,6 +41,10 @@ public class MoeRepository {
 
         Dictionary dict = Dictionary.getRootAsDictionary(loadData(dataPath));
         return dict.wordsByKey(word);
+    }
+
+    public Index getIndex() {
+        return Index.getRootAsIndex(loadData(MOE_INDEX_DATAPATH));
     }
 
     private ByteBuffer loadData(String dataPath) {
