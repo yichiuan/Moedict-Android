@@ -14,20 +14,18 @@ import com.yichiuan.moedict.ui.main.MainActivity;
 
 import java.util.ArrayList;
 
-import moe.Index;
-
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultViewHolder>
         implements View.OnClickListener {
 
     private LayoutInflater inflater;
 
-    private Index index;
+    private SearchViewModel model;
 
     private ArrayList<Integer> results;
 
-    ResultAdapter(Context context, Index index) {
+    ResultAdapter(Context context, SearchViewModel model) {
         inflater = LayoutInflater.from(context);
-        this.index = index;
+        this.model = model;
     }
 
     void setResults(ArrayList<Integer> results) {
@@ -49,7 +47,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
 
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int position) {
-        String word = index.words(results.get(position));
+        String word = model.getWord(results.get(position));
         holder.item.setText(word);
         holder.itemView.setTag(word);
     }

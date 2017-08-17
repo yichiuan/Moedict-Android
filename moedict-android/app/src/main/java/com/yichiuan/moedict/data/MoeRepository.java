@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Formatter;
 
+import io.reactivex.Completable;
 import moe.Dictionary;
 import moe.Index;
 import moe.Word;
@@ -28,7 +30,7 @@ public class MoeRepository {
 
     private byte[] dictBuffer;
 
-    private ByteBuffer indexBuffer;
+    private Index index;
 
     // Private constructor prevents instantiation from other classes
     MoeRepository(Context context) {
@@ -47,11 +49,12 @@ public class MoeRepository {
         return dict.wordsByKey(word);
     }
 
-    public Index getIndex() {
-        if (indexBuffer == null) {
-            indexBuffer = loadData(MOE_INDEX_DATAPATH, null);
-        }
-        return Index.getRootAsIndex(indexBuffer);
+    public Completable loadIndexData() {
+        return Completable.fromAction(() -> {
+            if (index == null) {
+                index = Index.getRootAsIndex(loadData(MOE_INDEX_DATAPATH, null));
+            }
+        });
     }
 
     private ByteBuffer loadDictData(String dataPath) {
@@ -83,5 +86,13 @@ public class MoeRepository {
         }
 
         return ByteBuffer.wrap(readBuffer, 0, readSize);
+    }
+
+    public ArrayList<Integer> search(String query) {
+        return index.search(query);
+    }
+
+    public String getWord(int position) {
+        return index.words(position);
     }
 }

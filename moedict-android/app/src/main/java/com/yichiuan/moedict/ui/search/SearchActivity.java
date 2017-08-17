@@ -1,6 +1,7 @@
 package com.yichiuan.moedict.ui.search;
 
 import android.app.SearchManager;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +30,6 @@ import dagger.android.AndroidInjection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import moe.Index;
 import timber.log.Timber;
 
 public class SearchActivity extends AppCompatActivity {
@@ -49,7 +49,7 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.imagebutton_search_back)
     ImageButton backButton;
 
-    private Index index;
+    SearchViewModel model;
 
     ResultAdapter resultAdapter;
 
@@ -63,29 +63,29 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
+        model = ViewModelProviders.of(this, new SearchViewModelFactory(moeRepository))
+                .get(SearchViewModel.class);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
-        index = moeRepository.getIndex();
-
-        setupSearchView();
         setResultView();
 
         backButton.setOnClickListener(v -> {
             finish();
         });
 
-
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            handleSearchIntent(intent);
-        }
+        disposable.add(model.loadIndexData()
+               .subscribeOn(Schedulers.io())
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribe(() -> {
+                   setupSearchView();
+               }));
     }
 
     private void setResultView() {
-        resultAdapter = new ResultAdapter(this, index);
+        resultAdapter = new ResultAdapter(this, model);
 
         resultRecyclerView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -108,7 +108,7 @@ public class SearchActivity extends AppCompatActivity {
                 })
                 .filter(query -> query.length() > 0)
                 .observeOn(Schedulers.computation())
-                .map(query -> index.search(query.toString()))
+                .map(query -> model.search(query.toString()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(results -> {
                     Timber.d("result count = " + results.size());
