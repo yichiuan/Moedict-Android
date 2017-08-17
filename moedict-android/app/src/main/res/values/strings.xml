@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Moedict Android</string>
-    <string name="search_hint">Search</string>
+    <string name="search_hint">輸入搜尋字詞</string>
+    <string name="search_no_item">沒有相關字詞</string>
 </resources>

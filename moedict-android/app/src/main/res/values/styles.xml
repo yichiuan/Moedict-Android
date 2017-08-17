@@ -17,7 +17,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
 
-    <style name="SearchViewTheme" parent="ThemeOverlay.AppCompat.Light">
+    <style name="SearchViewTheme" parent="AppTheme.AppBarOverlay">
         <item name="colorControlActivated">?colorAccent</item>
         <item name="searchViewStyle">@style/Widget.Moe.SearchView</item>
     </style>
