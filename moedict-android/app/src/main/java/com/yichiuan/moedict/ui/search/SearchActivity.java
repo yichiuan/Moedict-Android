@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
@@ -44,6 +45,9 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.textview_search_no_result)
     TextView noResultTextView;
 
+    @BindView(R.id.imagebutton_search_back)
+    ImageButton backButton;
+
     private Index index;
 
     ResultAdapter resultAdapter;
@@ -65,6 +69,11 @@ public class SearchActivity extends AppCompatActivity {
 
         setupSearchView();
         setResultView();
+
+        backButton.setOnClickListener(v -> {
+            finish();
+        });
+
 
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -110,7 +119,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void handleSearchIntent(Intent intent) {
-        if (resultAdapter.getResults().isEmpty()) {
+        if (resultAdapter.getResults() == null || resultAdapter.getResults().isEmpty()) {
             return;
         }
 
