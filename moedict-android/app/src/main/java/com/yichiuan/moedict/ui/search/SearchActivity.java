@@ -27,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import moe.Index;
 import timber.log.Timber;
@@ -51,6 +52,8 @@ public class SearchActivity extends AppCompatActivity {
     private Index index;
 
     ResultAdapter resultAdapter;
+
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public static void startSearch(Context context) {
         Intent intent = new Intent(context, SearchActivity.class);
@@ -97,7 +100,7 @@ public class SearchActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
-        RxSearchView.queryTextChanges(searchView)
+        disposable.add(RxSearchView.queryTextChanges(searchView)
                 .doOnNext(query -> {
                     if (query.length() == 0) {
                         hideResult();
@@ -115,7 +118,7 @@ public class SearchActivity extends AppCompatActivity {
                     } else {
                         showResults(results);
                     }
-                });
+                }));
     }
 
     private void handleSearchIntent(Intent intent) {
@@ -155,5 +158,11 @@ public class SearchActivity extends AppCompatActivity {
     private void hideResult() {
         resultRecyclerView.setVisibility(View.GONE);
         noResultTextView.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        disposable.clear();
+        super.onDestroy();
     }
 }
