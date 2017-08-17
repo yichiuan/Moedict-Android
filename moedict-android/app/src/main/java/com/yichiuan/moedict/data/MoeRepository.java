@@ -1,6 +1,8 @@
 package com.yichiuan.moedict.data;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +17,7 @@ import timber.log.Timber;
 public class MoeRepository {
 
     private static final int MOD_MASK = 0x3FF; // 0b1111111111
-    private static final int BUFFER_SIZE = (int)(1024 * 1024 * 3.2); // 3.2MB
+    private static final int BUFFER_SIZE = (int)(1024 * 1024 * 1.2); // 1.2 MB
 
     private static final String MOE_INDEX_DATAPATH = "moe/index.bin";
 
@@ -24,7 +26,9 @@ public class MoeRepository {
     private StringBuilder appendable = new StringBuilder();
     private Formatter formatter = new Formatter(appendable);
 
-    private byte[] buffer;
+    private byte[] dictBuffer;
+
+    private ByteBuffer indexBuffer;
 
     // Private constructor prevents instantiation from other classes
     MoeRepository(Context context) {
@@ -39,26 +43,38 @@ public class MoeRepository {
         appendable.setLength(0);
         String dataPath = formatter.format("moe/%d.bin", mod).toString();
 
-        Dictionary dict = Dictionary.getRootAsDictionary(loadData(dataPath));
+        Dictionary dict = Dictionary.getRootAsDictionary(loadDictData(dataPath));
         return dict.wordsByKey(word);
     }
 
     public Index getIndex() {
-        return Index.getRootAsIndex(loadData(MOE_INDEX_DATAPATH));
+        if (indexBuffer == null) {
+            indexBuffer = loadData(MOE_INDEX_DATAPATH, null);
+        }
+        return Index.getRootAsIndex(indexBuffer);
     }
 
-    private ByteBuffer loadData(String dataPath) {
+    private ByteBuffer loadDictData(String dataPath) {
+        if (dictBuffer == null) {
+            dictBuffer = new byte[BUFFER_SIZE];
+        }
+        return loadData(dataPath, dictBuffer);
+    }
+
+    private ByteBuffer loadData(@NonNull String dataPath, @Nullable byte[] buffer) {
 
         int readSize = 0;
+        byte[] readBuffer = buffer;
+
         try {
             final InputStream is = context.getAssets().open(dataPath);
 
             int size = is.available();
 
-            if (buffer == null) {
-                buffer = new byte[BUFFER_SIZE];
+            if (readBuffer == null || readBuffer.length < size) {
+                readBuffer = new byte[size];
             }
-            readSize = is.read(buffer, 0, size);
+            readSize = is.read(readBuffer, 0, size);
 
             is.close();
 
@@ -66,6 +82,6 @@ public class MoeRepository {
             Timber.e(e);
         }
 
-        return ByteBuffer.wrap(buffer, 0, readSize);
+        return ByteBuffer.wrap(readBuffer, 0, readSize);
     }
 }
