@@ -3,6 +3,7 @@ package com.yichiuan.moedict.data;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +15,6 @@ import io.reactivex.Completable;
 import moe.Dictionary;
 import moe.Index;
 import moe.Word;
-import timber.log.Timber;
 
 public class MoeRepository {
 
@@ -37,7 +37,7 @@ public class MoeRepository {
         this.context = context;
     }
 
-    public Word getMoeWord(String word) {
+    public Word getMoeWord(String word) throws IOException {
 
         int firstWord = word.codePointAt(0);
         int mod = firstWord & MOD_MASK; // code point % 1024
@@ -49,6 +49,13 @@ public class MoeRepository {
         return dict.wordsByKey(word);
     }
 
+    @VisibleForTesting
+    Dictionary getMoeDictionary(int mod) throws IOException {
+        appendable.setLength(0);
+        String dataPath = formatter.format("moe/%d.bin", mod).toString();
+        return Dictionary.getRootAsDictionary(loadDictData(dataPath));
+    }
+
     public Completable loadIndexData() {
         return Completable.fromAction(() -> {
             if (index == null) {
@@ -57,33 +64,45 @@ public class MoeRepository {
         });
     }
 
-    private ByteBuffer loadDictData(String dataPath) {
+    private ByteBuffer loadDictData(String dataPath) throws IOException {
         if (dictBuffer == null) {
             dictBuffer = new byte[BUFFER_SIZE];
         }
         return loadData(dataPath, dictBuffer);
     }
 
-    private ByteBuffer loadData(@NonNull String dataPath, @Nullable byte[] buffer) {
+    private ByteBuffer loadData(@NonNull String dataPath, @Nullable byte[] buffer) throws IOException {
+
+        InputStream is = null;
+        ByteBuffer byteBuffer = null;
+        try {
+            is = context.getAssets().open(dataPath);
+            byteBuffer = loadData(is, buffer);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+
+                }
+            }
+        }
+        return byteBuffer;
+    }
+
+    private ByteBuffer loadData(@NonNull InputStream is, @Nullable byte[] buffer) throws IOException {
 
         int readSize = 0;
         byte[] readBuffer = buffer;
 
-        try {
-            final InputStream is = context.getAssets().open(dataPath);
+        int size = is.available();
 
-            int size = is.available();
-
-            if (readBuffer == null || readBuffer.length < size) {
-                readBuffer = new byte[size];
-            }
-            readSize = is.read(readBuffer, 0, size);
-
-            is.close();
-
-        } catch (IOException e) {
-            Timber.e(e);
+        if (readBuffer == null || readBuffer.length < size) {
+            readBuffer = new byte[size];
         }
+        readSize = is.read(readBuffer, 0, size);
+
+        is.close();
 
         return ByteBuffer.wrap(readBuffer, 0, readSize);
     }

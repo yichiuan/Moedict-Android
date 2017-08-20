@@ -15,12 +15,15 @@ import com.yichiuan.moedict.R;
 import com.yichiuan.moedict.data.MoeRepository;
 import com.yichiuan.moedict.ui.search.SearchActivity;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import moe.Word;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,7 +75,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showWord(String query) {
-        Word word = moeRepository.getMoeWord(query);
+
+        Word word = null;
+        try {
+            word = moeRepository.getMoeWord(query);
+        } catch (IOException e) {
+            Timber.e(e);
+        }
 
         if (word == null) return;
 

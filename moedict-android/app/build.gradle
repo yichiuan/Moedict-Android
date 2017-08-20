@@ -27,6 +27,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    sourceSets.test.resources.srcDirs += ["src/main"]
 }
 
 dexcount {
@@ -69,6 +71,8 @@ dependencies {
 
     // For Testing
     testImplementation "junit:junit:${libs.junit}"
+    testImplementation "org.mockito:mockito-core:${libs.mockito}"
+    androidTestImplementation "org.mockito:mockito-android:${libs.mockito}"
 
     androidTestImplementation "com.android.support.test:runner:${libs.testrunner}"
 
