@@ -50,6 +50,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:${libs.rxjava}"
     implementation "io.reactivex.rxjava2:rxandroid:${libs.rxandroid}"
     implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${libs.rxbinding}"
+    implementation "com.jakewharton.rx2:replaying-share:${libs.replaying_share}"
 
     // Dagger DI
     implementation "com.google.dagger:dagger:${libs.dagger}"

@@ -5,7 +5,9 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.MainThread;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,9 +32,11 @@ import dagger.android.AndroidInjection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class SearchActivity extends AppCompatActivity {
+
+    public final static String QUERY_STRING_KEY = "query";
+    public final static String LIST_STATE_KEY = "recycler_list_state";
 
     @Inject
     MoeRepository moeRepository;
@@ -53,6 +57,11 @@ public class SearchActivity extends AppCompatActivity {
 
     ResultAdapter resultAdapter;
 
+    String queryForResult = "";
+
+    String storedQuery;
+    Parcelable storedListState;
+
     private final CompositeDisposable disposable = new CompositeDisposable();
 
     public static void startSearch(Context context) {
@@ -63,18 +72,24 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
-        model = ViewModelProviders.of(this, new SearchViewModelFactory(moeRepository))
-                .get(SearchViewModel.class);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+
+        model = ViewModelProviders.of(this, new SearchViewModelFactory(moeRepository))
+                .get(SearchViewModel.class);
 
         setResultView();
 
         backButton.setOnClickListener(v -> {
             finish();
         });
+
+        if (savedInstanceState != null) {
+            storedQuery = savedInstanceState.getString(QUERY_STRING_KEY);
+            storedListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+        }
 
         disposable.add(model.loadIndexData()
                .subscribeOn(Schedulers.io())
@@ -93,6 +108,11 @@ public class SearchActivity extends AppCompatActivity {
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         resultRecyclerView.setHasFixedSize(true);
         resultRecyclerView.setAdapter(resultAdapter);
+
+        if (storedListState != null) {
+            resultRecyclerView.getLayoutManager().onRestoreInstanceState(storedListState);
+        }
+
         resultRecyclerView.setVisibility(View.GONE);
     }
 
@@ -108,16 +128,10 @@ public class SearchActivity extends AppCompatActivity {
                 })
                 .filter(query -> query.length() > 0)
                 .observeOn(Schedulers.computation())
-                .map(query -> model.search(query.toString()))
+                .flatMap(query -> model.search(query.toString()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(results -> {
-                    Timber.d("result count = " + results.size());
-
-                    if (results.isEmpty()) {
-                        showNoResult();
-                    } else {
-                        showResults(results);
-                    }
+                .subscribe(result -> {
+                    handleResult(result);
                 }));
     }
 
@@ -141,15 +155,33 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    private void handleResult(Pair<String, ArrayList<Integer>> result) {
+        queryForResult = result.first;
+
+        if (result.second.isEmpty()) {
+            showNoResult();
+        } else {
+            showResult(result.second);
+        }
+
+        storedListState = null;
+        storedQuery = null;
+    }
+
     private void showNoResult() {
         resultRecyclerView.setVisibility(View.GONE);
         noResultTextView.setVisibility(View.VISIBLE);
     }
 
-    private void showResults(ArrayList<Integer> results) {
+    private void showResult(ArrayList<Integer> results) {
         resultAdapter.setResults(results);
-        resultRecyclerView.scrollToPosition(0);
         resultRecyclerView.setVisibility(View.VISIBLE);
+
+        if (storedListState != null && storedQuery.equals(queryForResult)) {
+            resultRecyclerView.getLayoutManager().onRestoreInstanceState(storedListState);
+        } else {
+            resultRecyclerView.scrollToPosition(0);
+        }
 
         noResultTextView.setVisibility(View.GONE);
     }
@@ -158,6 +190,15 @@ public class SearchActivity extends AppCompatActivity {
     private void hideResult() {
         resultRecyclerView.setVisibility(View.GONE);
         noResultTextView.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save list state
+        outState.putString(QUERY_STRING_KEY, queryForResult);
+        Parcelable listState = resultRecyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(LIST_STATE_KEY, listState);
     }
 
     @Override
