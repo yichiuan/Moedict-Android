@@ -75,7 +75,8 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${libs.mockito}"
     androidTestImplementation "org.mockito:mockito-android:${libs.mockito}"
 
-    androidTestImplementation "com.android.support.test:runner:${libs.testrunner}"
+    androidTestImplementation "com.android.support.test:runner:${libs.test_runner}"
+    androidTestImplementation "com.android.support.test:rules:${libs.test_rules}"
 
     androidTestImplementation("com.android.support.test.espresso:espresso-core:${libs.espresso}", {
         exclude group: 'com.android.support', module: 'support-annotations'

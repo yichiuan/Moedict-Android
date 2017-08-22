@@ -41,7 +41,8 @@ ext {
 
             // for test
             junit            : "4.12",
-            testrunner       : "1.0.0",
+            test_runner      : "1.0.0",
+            test_rules       : "1.0.0",
             espresso         : "3.0.0",
             mockito          : "2.8.47",
     ]
