@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 import com.yichiuan.moedict.R;
 import com.yichiuan.moedict.data.MoeRepository;
+import com.yichiuan.moedict.ui.RepositoryViewModelFactory;
 import com.yichiuan.moedict.ui.main.MainActivity;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
-        model = ViewModelProviders.of(this, new SearchViewModelFactory(moeRepository))
+        model = ViewModelProviders.of(this, new RepositoryViewModelFactory(moeRepository))
                 .get(SearchViewModel.class);
 
         setResultView();

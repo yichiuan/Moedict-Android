@@ -1,6 +1,7 @@
 package com.yichiuan.moedict.ui.main;
 
 import android.app.SearchManager;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 
 import com.yichiuan.moedict.R;
 import com.yichiuan.moedict.data.MoeRepository;
+import com.yichiuan.moedict.ui.RepositoryViewModelFactory;
 import com.yichiuan.moedict.ui.search.SearchActivity;
 
 import java.io.IOException;
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recyclerview_heteronym)
     RecyclerView heteronymRecyclerview;
 
+    MoeViewModel model;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
@@ -43,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        model = ViewModelProviders.of(this, new RepositoryViewModelFactory(moeRepository))
+                .get(MoeViewModel.class);
 
         setSupportActionBar(toolbar);
 
@@ -78,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         Word word = null;
         try {
-            word = moeRepository.getMoeWord(query);
+            word = model.getMoeWord(query);
         } catch (IOException e) {
             Timber.e(e);
         }
