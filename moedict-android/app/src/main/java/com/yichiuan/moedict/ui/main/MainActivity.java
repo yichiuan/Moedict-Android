@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     @BindView(R.id.recyclerview_heteronym)
-    RecyclerView heteronymRecyclerview;
+    RecyclerView heteronymRecyclerView;
 
     MoeViewModel model;
 
@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        heteronymRecyclerview.setLayoutManager(
+        heteronymRecyclerView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        heteronymRecyclerview.setHasFixedSize(true);
+        heteronymRecyclerView.setHasFixedSize(true);
 
         Intent intent = getIntent();
         String query = intent.getStringExtra(SearchManager.QUERY);
@@ -92,14 +92,14 @@ public class MainActivity extends AppCompatActivity {
 
         if (word == null) return;
 
-        HeteronymAdapter adapter = (HeteronymAdapter) heteronymRecyclerview.getAdapter();
+        HeteronymAdapter adapter = (HeteronymAdapter) heteronymRecyclerView.getAdapter();
 
         if (adapter == null) {
-            heteronymRecyclerview.setAdapter(new HeteronymAdapter(this, word));
+            heteronymRecyclerView.setAdapter(new HeteronymAdapter(this, word, getLifecycle()));
         } else {
             adapter.setWord(word);
         }
 
-        heteronymRecyclerview.post(()->heteronymRecyclerview.scrollToPosition(0));
+        heteronymRecyclerView.post(()-> heteronymRecyclerView.scrollToPosition(0));
     }
 }

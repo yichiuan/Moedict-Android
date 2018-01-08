@@ -1,28 +1,38 @@
 package com.yichiuan.moedict.ui.main;
 
+import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.yichiuan.moedict.BuildConfig;
 import com.yichiuan.moedict.R;
-import com.yichiuan.moedict.common.ui.StaticTextView;
 import com.yichiuan.moedict.common.TextUtil;
+import com.yichiuan.moedict.common.VoicePlayer;
+import com.yichiuan.moedict.common.ui.StaticTextView;
 
 import moe.Heteronym;
 import moe.Word;
 
 public class HeteronymAdapter extends RecyclerView.Adapter<HeteronymAdapter.HeteronymViewHolder> {
 
-    LayoutInflater inflater;
+    private static final String VOICE_URL = BuildConfig.VOICE_BASE_URL + "%s.mp3";
 
-    Word word;
+    private LayoutInflater inflater;
 
-    public HeteronymAdapter(Context context, Word word) {
+    private Word word;
+
+    VoicePlayer voicePlayer;
+
+    public HeteronymAdapter(Context context, Word word, Lifecycle lifecycle) {
         inflater = LayoutInflater.from(context);
         this.word = word;
+
+        voicePlayer = new VoicePlayer(context, lifecycle);
     }
 
     public void setWord(Word word) {
@@ -42,10 +52,31 @@ public class HeteronymAdapter extends RecyclerView.Adapter<HeteronymAdapter.Hete
                 TextUtil.obtainSpannedFrom(word.titleAsByteBuffer()));
 
         Heteronym heteronym = word.heteronyms(position);
+
+        holder.playButton.setOnClickListener(v -> {
+            Button button = (Button) v;
+            String voiceId = heteronym.audioId();
+
+            if (voicePlayer.isPlaying()) {
+                voicePlayer.stopVoice();
+                button.setText("Play");
+            } else {
+                playVoice(voiceId);
+
+                voicePlayer.setOnLoadedListener(() -> button.setText("Stop"));
+                button.setText("Loading");
+            }
+        });
+
         String bopomofo = heteronym.bopomofo();
         holder.title.setPinyin(bopomofo);
         holder.recyclerView.setAdapter(
                 new DefinitionAdapter(holder.recyclerView.getContext(), heteronym));
+    }
+
+    void playVoice(String voiceId) {
+        String url = String.format(VOICE_URL, voiceId);
+        voicePlayer.playVoice(url);
     }
 
     @Override
@@ -56,11 +87,13 @@ public class HeteronymAdapter extends RecyclerView.Adapter<HeteronymAdapter.Hete
     static class HeteronymViewHolder extends RecyclerView.ViewHolder {
 
         StaticTextView title;
+        Button playButton;
         RecyclerView recyclerView;
 
-        public HeteronymViewHolder(View itemView) {
+        HeteronymViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.staticview_title);
+            playButton = itemView.findViewById(R.id.button_play);
             recyclerView = itemView.findViewById(R.id.recyclerview_definition);
             recyclerView.setLayoutManager(
                     new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL,
