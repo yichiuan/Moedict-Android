@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.MainThread;
+import android.support.v4.app.NavUtils;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -83,9 +84,7 @@ public class SearchActivity extends AppCompatActivity {
 
         setResultView();
 
-        backButton.setOnClickListener(v -> {
-            finish();
-        });
+        backButton.setOnClickListener(v -> NavUtils.navigateUpFromSameTask(this));
 
         if (savedInstanceState != null) {
             storedQuery = savedInstanceState.getString(QUERY_STRING_KEY);
@@ -95,9 +94,7 @@ public class SearchActivity extends AppCompatActivity {
         disposable.add(model.loadIndexData()
                .subscribeOn(Schedulers.io())
                .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(() -> {
-                   setupSearchView();
-               }));
+               .subscribe(this::setupSearchView));
     }
 
     private void setResultView() {
@@ -131,9 +128,7 @@ public class SearchActivity extends AppCompatActivity {
                 .observeOn(Schedulers.computation())
                 .flatMap(query -> model.search(query.toString()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    handleResult(result);
-                }));
+                .subscribe(this::handleResult));
     }
 
     private void handleSearchIntent(Intent intent) {
