@@ -44,7 +44,7 @@ message("GENERATED_FILES: ${GENERATED_FILES}")
 set(INCLUDE_DIRS include)
 
 # third-party
-set(INCLUDE_DIRS ${INCLUDE_DIRS} third-party/flatbuffers-1.8.0 third-party/json-2.1.1)
+set(INCLUDE_DIRS ${INCLUDE_DIRS} third-party/flatbuffers-1.8.0 third-party/json-3.0.1)
 
 set(INCLUDE_DIRS ${INCLUDE_DIRS} ${FBS_GENERATED_DIR})
 
