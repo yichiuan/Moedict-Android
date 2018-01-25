@@ -61,9 +61,9 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:${libs.dagger}"
     annotationProcessor "com.google.dagger:dagger-android-processor:${libs.dagger}"
 
-    // For Lifecycle, ViewModel and LiveData
-    implementation "android.arch.lifecycle:runtime:${libs.arch_components}"
+    // For Lifecycle and ViewModel
     implementation "android.arch.lifecycle:extensions:${libs.arch_components}"
+    implementation "android.arch.lifecycle:viewmodel:${libs.arch_components}"
     annotationProcessor "android.arch.lifecycle:compiler:${libs.arch_components}"
 
     // For Debug
