@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
@@ -39,6 +42,7 @@ dexcount {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     implementation "com.android.support:appcompat-v7:${libs.supportVersion}"
     implementation "com.android.support:recyclerview-v7:${libs.supportVersion}"
@@ -46,7 +50,7 @@ dependencies {
     // ButterKnife
     implementation "com.jakewharton:butterknife:${libs.butterknife}"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    annotationProcessor "com.jakewharton:butterknife-compiler:${libs.butterknife}"
+    kapt "com.jakewharton:butterknife-compiler:${libs.butterknife}"
 
     //RxJava
     implementation "io.reactivex.rxjava2:rxjava:${libs.rxjava}"
@@ -56,10 +60,10 @@ dependencies {
 
     // Dagger DI
     implementation "com.google.dagger:dagger:${libs.dagger}"
-    annotationProcessor "com.google.dagger:dagger-compiler:${libs.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${libs.dagger}"
 
     implementation "com.google.dagger:dagger-android-support:${libs.dagger}"
-    annotationProcessor "com.google.dagger:dagger-android-processor:${libs.dagger}"
+    kapt "com.google.dagger:dagger-android-processor:${libs.dagger}"
 
     // For Lifecycle and ViewModel
     implementation "android.arch.lifecycle:extensions:${libs.arch_components}"
