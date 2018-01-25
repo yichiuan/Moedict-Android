@@ -19,14 +19,14 @@ public final class Definition extends Table {
   public ByteBuffer defAsByteBuffer() { return __vector_as_bytebuffer(4, 2); }
   public String type() { int o = __offset(6); return o != 0 ? __string(o + bb_pos) : null; }
   public ByteBuffer typeAsByteBuffer() { return __vector_as_bytebuffer(6, 1); }
-  public moe.UTF16String quotes(int j) { return quotes(new moe.UTF16String(), j); }
-  public moe.UTF16String quotes(moe.UTF16String obj, int j) { int o = __offset(8); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public UTF16String quotes(int j) { return quotes(new UTF16String(), j); }
+  public UTF16String quotes(UTF16String obj, int j) { int o = __offset(8); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
   public int quotesLength() { int o = __offset(8); return o != 0 ? __vector_len(o) : 0; }
-  public moe.UTF16String examples(int j) { return examples(new moe.UTF16String(), j); }
-  public moe.UTF16String examples(moe.UTF16String obj, int j) { int o = __offset(10); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public UTF16String examples(int j) { return examples(new UTF16String(), j); }
+  public UTF16String examples(UTF16String obj, int j) { int o = __offset(10); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
   public int examplesLength() { int o = __offset(10); return o != 0 ? __vector_len(o) : 0; }
-  public moe.UTF16String links(int j) { return links(new moe.UTF16String(), j); }
-  public moe.UTF16String links(moe.UTF16String obj, int j) { int o = __offset(12); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public UTF16String links(int j) { return links(new UTF16String(), j); }
+  public UTF16String links(UTF16String obj, int j) { int o = __offset(12); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
   public int linksLength() { int o = __offset(12); return o != 0 ? __vector_len(o) : 0; }
   public int synonyms(int j) { int o = __offset(14); return o != 0 ? bb.getShort(__vector(o) + j * 2) & 0xFFFF : 0; }
   public int synonymsLength() { int o = __offset(14); return o != 0 ? __vector_len(o) : 0; }

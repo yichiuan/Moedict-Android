@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 
-set(CMAKE_C_COMPILER clang-4.0)
-set(CMAKE_CXX_COMPILER clang++-4.0)
+set(CMAKE_C_COMPILER clang-5.0)
+set(CMAKE_CXX_COMPILER clang++-5.0)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -44,7 +44,7 @@ message("GENERATED_FILES: ${GENERATED_FILES}")
 set(INCLUDE_DIRS include)
 
 # third-party
-set(INCLUDE_DIRS ${INCLUDE_DIRS} third-party/flatbuffers-1.7.1 third-party/json-2.1.1)
+set(INCLUDE_DIRS ${INCLUDE_DIRS} third-party/flatbuffers-1.8.0 third-party/json-2.1.1)
 
 set(INCLUDE_DIRS ${INCLUDE_DIRS} ${FBS_GENERATED_DIR})
 

@@ -16,8 +16,8 @@ public final class Category extends Table {
 
   public String index() { int o = __offset(4); return o != 0 ? __string(o + bb_pos) : null; }
   public ByteBuffer indexAsByteBuffer() { return __vector_as_bytebuffer(4, 1); }
-  public moe.UTF16String terms(int j) { return terms(new moe.UTF16String(), j); }
-  public moe.UTF16String terms(moe.UTF16String obj, int j) { int o = __offset(6); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public UTF16String terms(int j) { return terms(new UTF16String(), j); }
+  public UTF16String terms(UTF16String obj, int j) { int o = __offset(6); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
   public int termsLength() { int o = __offset(6); return o != 0 ? __vector_len(o) : 0; }
 
   public static int createCategory(FlatBufferBuilder builder,
@@ -50,7 +50,7 @@ public final class Category extends Table {
     while (span != 0) {
       int middle = span / 2;
       int tableOffset = __indirect(vectorLocation + 4 * (start + middle), bb);
-      int comp = compareStrings(__offset(4, bb.array().length - tableOffset, bb), byteKey, bb);
+      int comp = compareStrings(__offset(4, bb.capacity() - tableOffset, bb), byteKey, bb);
       if (comp > 0) {
         span = middle;
       } else if (comp < 0) {

@@ -92,7 +92,6 @@ void read_radical(uint8_t* buf_point) {
     for (size_t i = 0; i < stroke_size; ++i) {
         auto words = stroke->Get(i);
         size_t words_size = words->word()->size();
-        cout << "heo";
     }
 }
 
