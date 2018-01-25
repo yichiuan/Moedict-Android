@@ -49,7 +49,7 @@ public class HeteronymAdapter extends RecyclerView.Adapter<HeteronymAdapter.Hete
     @Override
     public void onBindViewHolder(HeteronymViewHolder holder, int position) {
         holder.title.setText(
-                TextUtil.obtainSpannedFrom(word.titleAsByteBuffer()));
+                TextUtil.INSTANCE.obtainSpannedFrom(word.titleAsByteBuffer()));
 
         Heteronym heteronym = word.heteronyms(position);
 

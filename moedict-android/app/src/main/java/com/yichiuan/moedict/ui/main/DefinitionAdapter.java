@@ -98,13 +98,13 @@ public class DefinitionAdapter extends RecyclerView.Adapter<DefinitionAdapter.De
 
             Definition definition = section.definitions.get(i);
 
-            builder.append(TextUtil.obtainSpannedFrom(definition.defAsByteBuffer()));
+            builder.append(TextUtil.INSTANCE.obtainSpannedFrom(definition.defAsByteBuffer()));
 
             for (int j = 0; j < definition.examplesLength(); ++j) {
                 if (j != 0 || builder.length() != 0) {
                     builder.append("\n");
                 }
-                builder.append(TextUtil.obtainSpannedFrom(
+                builder.append(TextUtil.INSTANCE.obtainSpannedFrom(
                         definition.examples(j).u16strAsByteBuffer()));
             }
 
@@ -112,7 +112,7 @@ public class DefinitionAdapter extends RecyclerView.Adapter<DefinitionAdapter.De
                 if (j != 0 || builder.length() != 0) {
                     builder.append("\n");
                 }
-                builder.append(TextUtil.obtainSpannedFrom(
+                builder.append(TextUtil.INSTANCE.obtainSpannedFrom(
                         definition.quotes(j).u16strAsByteBuffer()));
             }
 
@@ -120,7 +120,7 @@ public class DefinitionAdapter extends RecyclerView.Adapter<DefinitionAdapter.De
                 if (j != 0 || builder.length() != 0) {
                     builder.append("\n");
                 }
-                builder.append(TextUtil.obtainSpannedFrom(
+                builder.append(TextUtil.INSTANCE.obtainSpannedFrom(
                         definition.links(j).u16strAsByteBuffer()));
             }
 
