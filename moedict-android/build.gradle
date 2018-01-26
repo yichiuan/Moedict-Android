@@ -28,7 +28,6 @@ ext {
 
     libs = [
             supportVersion   : "27.0.2",
-            butterknife      : "8.8.1",
             rxjava           : "2.1.8",
             rxandroid        : "2.0.1",
             rxbinding        : "2.0.0",
