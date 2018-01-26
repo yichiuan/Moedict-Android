@@ -1,0 +1,12 @@
+def generateVersionName(major, minor, patch) {
+    return "$major.$minor.$patch"
+}
+
+def generateVersionCode(api, hw, major, minor, patch) {
+    return  api * 100000 + hw * 1000 + major * 100 + minor * 10 + patch
+}
+
+ext {
+    generateVersionName = this.&generateVersionName
+    generateVersionCode = this.&generateVersionCode
+}

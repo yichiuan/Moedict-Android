@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.getkeepsafe.dexcount'
 
+apply from: "$project.rootDir/tools/versioning.gradle"
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -11,8 +13,9 @@ android {
         applicationId "com.yichiuan.moedict"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode generateVersionCode(rootProject.ext.minSdkVersion, 0, versionMajor, versionMinor, versionPatch)
+        versionName generateVersionName(versionMajor, versionMinor, versionPatch)
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField 'String', 'VOICE_BASE_URL', '"https://203146b5091e8f0aafda-15d41c68795720c6e932125f5ace0c70.ssl.cf1.rackcdn.com/"'
@@ -20,6 +23,7 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
+            versionNameSuffix '-debug'
         }
 
         release {
